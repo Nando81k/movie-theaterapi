@@ -3,6 +3,10 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+// import seed
+
+const { seed } = require('./seed');
+
 // initialize server-sided validation
 const { check, validationResult } = require('express-validator');
 
@@ -15,6 +19,17 @@ app.post('/users', [check ('username').not().isEmpty().trim()],
     }
     else {
         Object.User.push(req.body);
+    }
+});
+
+app.post('/shows', [check ('title').not().isEmpty().trim()],
+    (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.json({error: errors.array()})
+    }
+    else {
+        Object.Show.push(req.body);
     }
 });
 
@@ -36,6 +51,7 @@ app.use('/users', userRoutes);
 app.use('/shows', showRoutes);
 
 // server side validation for user input
+
 
 
 

@@ -31,16 +31,16 @@ router.get('/:id', async (req, res) => {
 });
 
 // GET shows of a particular genre (genre in req.params)
-router.get('/:id/shows/genre/:genre', async (req, res) => {
-    const user = await User.findByPk(req.params.id);
-    const shows = await user.getShows({
+router.get('/genre/:genre', async (req, res) => {
+    // const user = await User.findByPk(req.params.id);
+    const shows = await Show.findAll({
         where: { genre: req.params.genre }
     });
     res.json(shows);
 });
 
 // PUT update rating of a show that has been watched
-router.put('/:id/shows/:showId/rating', async (req, res) => {
+router.put('/:id/rating', async (req, res) => {
     const user = await User.findByPk(req.params.id);
     const show = await Show.findByPk(req.params.showId);
     await user.updateShow(show, { rating: req.body.rating });
@@ -48,7 +48,7 @@ router.put('/:id/shows/:showId/rating', async (req, res) => {
 });
 
 // PUT update the status of a show 
-router.put('/:id/shows/:showId/status', async (req, res) => {
+router.put('/:id/status', async (req, res) => {
     const user = await User.findByPk(req.params.id);
     const show = await Show.findByPk(req.params.showId);
     await user.updateShow(show, { status: req.body.status });
@@ -56,7 +56,7 @@ router.put('/:id/shows/:showId/status', async (req, res) => {
 });
 
 // DELETE a show
-router.delete('/:id/shows/:showId', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     const user = await User.findByPk(req.params.id);
     const show = await Show.findByPk(req.params.showId);
     await user.removeShow(show);

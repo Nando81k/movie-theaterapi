@@ -27,38 +27,19 @@ router.get('/:id', async (req, res) => {
     res.json(user);
 });
 
-// GET shows of a particular genre (genre in req.params)
-router.get('/:id/shows/genre/:genre', async (req, res) => {
+// GET all shows of a user
+router.get('/:id/shows', async (req, res) => {
     const user = await User.findByPk(req.params.id);
-    const shows = await user.getShows({
-        where: { genre: req.params.genre }
-    });
-    res.json(shows);
-});
-
-// PUT update rating of a show that has been watched
-router.put('/:id/shows/:showId/rating', async (req, res) => {
-    const user = await User.findByPk(req.params.id);
-    const show = await Show.findByPk(req.params.showId);
-    await user.updateShow(show, { rating: req.body.rating });
+    const show = await user.getShows();
     res.json(show);
 });
 
-// PUT update the status of a show 
-router.put('/:id/shows/:showId/status', async (req, res) => {
+// `PUT` update and add a show if a user has watched it
+router.put('/:id/shows/:showId', async (req, res) => {
     const user = await User.findByPk(req.params.id);
-    const show = await Show.findByPk(req.params.showId);
-    await user.updateShow(show, { status: req.body.status });
+    const show = await Show.findByPk(req.body.showId);
+    await user.addShow(show);
     res.json(show);
 });
-
-// DELETE a show
-router.delete('/:id/shows/:showId', async (req, res) => {
-    const user = await User.findByPk(req.params.id);
-    const show = await Show.findByPk(req.params.showId);
-    await user.removeShow(show);
-    res.json(show);
-});
-
 
 module.exports = router;
