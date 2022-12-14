@@ -33,10 +33,6 @@ const seed = async () => {
 
     console.log("Shows and User database info populated!")
 }
-<<<<<<< HEAD
-
-=======
 seed();
->>>>>>> c3d9834 (Added routes and populated tables using seed function)
 //export my seed function
 module.exports = seed;

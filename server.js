@@ -1,52 +1,41 @@
 // initialize the server
 const express = require('express');
-const seed = require('./seed');
 const app = express();
 const port = 3000;
+
+// initialize server-sided validation
+const { check, validationResult } = require('express-validator');
+
+// server-sided validation rules
+app.post('/users', [check ('username').not().isEmpty().trim()], 
+    (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.json({error: errors.array()})
+    }
+    else {
+        Object.User.push(req.body);
+    }
+});
+
 
 // import models
 const { Show } = require('./models/Show');
 const { User } = require('./models/User');
 const { db } = require('./db');
-const {router} = require('./routes/routes');
+
+// import routes
+const userRoutes = require('./routes/userRoutes');
+const showRoutes = require('./routes/showRoutes');
 
 // express router
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use('/users', userRoutes);
+app.use('/shows', showRoutes);
 
-
-// const router = express.Router();
-// app.get('/', (req, res) => {
-//     res.send('Hello World!');
-// });
-
-// app.get('/shows', async (req, res) => {
-//     const shows = await Show.findAll();
-//     res.json(shows);
-// });
-
-// app.get('/users', async (req, res) => {
-//     const users = await User.findAll();
-//     res.json(users);
-// });
-
-// app.get('/users/:id', async (req, res) => {
-//     const user = await User.findByPk(req.params.id);
-//     res.json(user);
-// });
-
-// app.post('/users', async (req, res) => {
-//     const user = await User.create(req.body);
-//     res.json(user);
-// });
-
-// app.put('/users/:id', async (req, res) => {
-//     const user = await User.update(req.body, {
-//         where: { id: req.params.id }
-//     });
-//     res.json(user);
-// });
+// server side validation for user input
 
 
 
